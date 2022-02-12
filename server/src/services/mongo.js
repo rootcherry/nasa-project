@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const config = require('../config/env');
+const config = require('../../config/env');
 
 const MONGO_URL = config.MONGODB_URL;
 
@@ -12,14 +12,14 @@ mongoose.connection.on('error', (err) => {
 });
 
 async function mongoConnect() {
-  mongoose.connect(MONGO_URL, {
-    // useNewUrlParser: true,
-    // useFindAndModify: false,
-    // useCreateIndex: true,
-    // useUnifiedTopology: true
-  });
+  await mongoose.connect(MONGO_URL);
+}
+
+async function mongoDisconnect() {
+  await mongoose.disconnect();
 }
 
 module.exports = {
   mongoConnect,
+  mongoDisconnect,
 };
