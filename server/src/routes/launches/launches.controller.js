@@ -1,4 +1,4 @@
-const {
+const { 
   getAllLaunches,
   scheduleNewLaunch,
   existsLaunchWithId,
@@ -10,7 +10,6 @@ const {
 } = require('../../services/query');
 
 async function httpGetAllLaunches(req, res) {
-  // console.log(req.query);
   const { skip, limit } = getPagination(req.query);
   const launches = await getAllLaunches(skip, limit);
   return res.status(200).json(launches);
@@ -22,19 +21,18 @@ async function httpAddNewLaunch(req, res) {
   if (!launch.mission || !launch.rocket || !launch.launchDate
     || !launch.target) {
       return res.status(400).json({
-        error: 'Missing required launch property'
+        error: 'Missing required launch property',
       });
     }
 
   launch.launchDate = new Date(launch.launchDate);
-  if (isNaN(launch.launchDate)) { // launch.launchDate.toString() === 'Invalid Date'
+  if (isNaN(launch.launchDate)) {
     return res.status(400).json({
       error: 'Invalid launch date',
     });
   }
 
   await scheduleNewLaunch(launch);
-  console.log(launch);
   return res.status(201).json(launch);
 }
 
@@ -49,12 +47,12 @@ async function httpAbortLaunch(req, res) {
   }
 
   const aborted = await abortLaunchById(launchId);
-
   if (!aborted) {
     return res.status(400).json({
       error: 'Launch not aborted',
     });
   }
+
   return res.status(200).json({
     ok: true,
   });
